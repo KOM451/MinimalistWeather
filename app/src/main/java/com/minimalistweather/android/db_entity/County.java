@@ -14,6 +14,16 @@ public class County extends LitePalSupport {
 
     private int cityId; // 所属市级规划
 
+    public County() {
+    }
+
+    public County(String countyName, int countyId, String weatherId, int cityId) {
+        this.countyName = countyName;
+        this.countyId = countyId;
+        this.weatherId = weatherId;
+        this.cityId = cityId;
+    }
+
     public int getId() {
         return id;
     }

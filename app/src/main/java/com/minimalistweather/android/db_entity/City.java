@@ -12,6 +12,15 @@ public class City extends LitePalSupport {
 
     private int provinceId; // 所属省级规划
 
+    public City() {
+    }
+
+    public City(String cityName, int cityId, int provinceId) {
+        this.cityName = cityName;
+        this.cityId = cityId;
+        this.provinceId = provinceId;
+    }
+
     public int getId() {
         return id;
     }
