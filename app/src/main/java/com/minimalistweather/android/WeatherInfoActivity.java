@@ -1,6 +1,11 @@
 package com.minimalistweather.android;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -9,6 +14,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -30,6 +36,12 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class WeatherInfoActivity extends AppCompatActivity {
+
+    public DrawerLayout drawerLayout;
+
+    public SwipeRefreshLayout swipeRefreshLayout; // 用于下拉刷新
+
+    private Button navButton; // 用于切换城市
 
     private ScrollView weatherInfoLayout;
 
@@ -59,6 +71,14 @@ public class WeatherInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather_info);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.drawer_container);
+        if (fragment == null) {
+            fragment = new ChooseAreaFragment();
+            fragmentManager.beginTransaction().add(R.id.drawer_container, fragment).commit();
+        }
+
         // 将背景图和状态栏融合到一起
         if (Build.VERSION.SDK_INT >= 21) {
             View decorView = getWindow().getDecorView();
@@ -80,20 +100,39 @@ public class WeatherInfoActivity extends AppCompatActivity {
         weatherInfoSuggestionWashCar = (TextView) findViewById(R.id.weather_info_suggestion_wash_car);
         weatherInfoSuggestionSport = (TextView) findViewById(R.id.weather_info_suggestion_sport);
         bingImg = (ImageView) findViewById(R.id.bing_img);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
+        navButton = (Button) findViewById(R.id.nav_button);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary); // 设置下拉进度条的颜色
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String weatherInfoContent = preferences.getString("weather", null);
+        final String weatherId;
         if (weatherInfoContent != null) {
             WeatherInfo weatherInfo = JsonUtil.weatherInfoHandler(weatherInfoContent);
+            weatherId = weatherInfo.getBasic().getWeatherId();
             // 展示天气信息
             showWeatherInfoContent(weatherInfo);
         } else {
             // 本地没有缓存
-            String weatherId = getIntent().getStringExtra("weather_id");
+            weatherId = getIntent().getStringExtra("weather_id");
             weatherInfoLayout.setVisibility(View.INVISIBLE);
             // 请求天气信息
             requestWeatherInfo(weatherId);
         }
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() { // 下拉请求天气数据
+                requestWeatherInfo(weatherId);
+            }
+        });
+        navButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
 
         // 加载背景
         String bingPic = preferences.getString("bing_pic", null);
@@ -117,6 +156,7 @@ public class WeatherInfoActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Toast.makeText(WeatherInfoActivity.this, "获取天气信息失败", Toast.LENGTH_SHORT).show();
+                        swipeRefreshLayout.setRefreshing(false); // 刷新事件结束
                     }
                 });
             }
@@ -139,6 +179,7 @@ public class WeatherInfoActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(WeatherInfoActivity.this, "获取天气信息失败", Toast.LENGTH_SHORT).show();
                         }
+                        swipeRefreshLayout.setRefreshing(false); // 刷新事件结束
                     }
                 });
             }

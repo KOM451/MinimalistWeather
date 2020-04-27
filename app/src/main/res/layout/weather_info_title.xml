@@ -5,6 +5,16 @@
     android:layout_height="?attr/actionBarSize">
     <!--天气信息头部-->
 
+    <!--切换城市的按钮-->
+    <Button
+        android:id="@+id/nav_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/ic_home"/>
+
     <!--显示当前天气信息的城市名称-->
     <TextView
         android:id="@+id/weather_info_title_city"

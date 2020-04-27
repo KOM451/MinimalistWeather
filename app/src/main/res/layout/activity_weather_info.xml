@@ -11,27 +11,50 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"/>
 
-    <ScrollView
-        android:id="@+id/weather_info_layout"
+    <!--用于加入滑动菜单功能-->
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:overScrollMode="never">
-        
-        <LinearLayout
-            android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <!--用于下拉刷新-->
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true">
+            android:layout_height="match_parent">
 
-            <include layout="@layout/weather_info_title"/>
-            <include layout="@layout/weather_info_now"/>
-            <include layout="@layout/weather_info_weather_forecast"/>
-            <include layout="@layout/weather_info_air_quality"/>
-            <include layout="@layout/weather_info_suggestion"/>
+            <ScrollView
+                android:id="@+id/weather_info_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                android:overScrollMode="never">
 
-        </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fitsSystemWindows="true">
 
-    </ScrollView>
+                    <include layout="@layout/weather_info_title"/>
+                    <include layout="@layout/weather_info_now"/>
+                    <include layout="@layout/weather_info_weather_forecast"/>
+                    <include layout="@layout/weather_info_air_quality"/>
+                    <include layout="@layout/weather_info_suggestion"/>
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <FrameLayout
+            android:id="@+id/drawer_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"/>
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+
 
 </FrameLayout>
