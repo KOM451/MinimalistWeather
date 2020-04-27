@@ -3,9 +3,11 @@ package com.minimalistweather.android.utils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.minimalistweather.android.db_entity.City;
 import com.minimalistweather.android.db_entity.County;
 import com.minimalistweather.android.db_entity.Province;
+import com.minimalistweather.android.gson_entity.WeatherInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -83,5 +85,20 @@ public class JsonUtil {
             }
         }
         return false;
+    }
+
+    /**
+     * 解析天气数据
+     */
+    public static WeatherInfo weatherInfoHandler(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherInfoContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherInfoContent, WeatherInfo.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

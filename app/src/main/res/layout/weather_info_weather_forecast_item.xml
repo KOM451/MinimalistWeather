@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp">
+    <!--天气预报项-->
+
+    <!--天气预报日期-->
+    <TextView
+        android:id="@+id/weather_info_weather_forecast_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:layout_gravity="center_vertical"
+        android:textColor="#ddd"/>
+
+    <!--天气概况-->
+    <TextView
+        android:id="@+id/weather_info_weather_forecast_survey"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:textColor="#ddd"/>
+
+    <!--最高温度-->
+    <TextView
+        android:id="@+id/weather_info_weather_forecast_max_tmp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:gravity="right"
+        android:textColor="#ddd"/>
+
+    <!--最低温度-->
+    <TextView
+        android:id="@+id/weather_info_weather_forecast_min_tmp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:gravity="right"
+        android:textColor="#ddd"/>
+
+</LinearLayout>

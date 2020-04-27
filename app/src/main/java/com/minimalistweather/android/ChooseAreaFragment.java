@@ -1,6 +1,7 @@
 package com.minimalistweather.android;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -131,6 +132,13 @@ public class ChooseAreaFragment extends Fragment {
                 int position = getAdapterPosition();
                 currentCity = cityList.get(position);
                 queryCountyList();
+            } else if (currentSelectedLevel == COUNTY) {
+                int position = getAdapterPosition();
+                String weatherId = countyList.get(position).getWeatherId();
+                Intent intent = new Intent(getActivity(), WeatherInfoActivity.class);
+                intent.putExtra("weather_id", weatherId);
+                startActivity(intent);
+                getActivity().finish();
             }
         }
     }
