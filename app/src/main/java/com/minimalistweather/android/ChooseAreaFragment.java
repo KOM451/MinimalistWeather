@@ -119,7 +119,7 @@ public class ChooseAreaFragment extends Fragment {
 
         public void bind(String areaName) {
             this.areaName = areaName;
-            areaItemText.setText(areaName);
+            areaItemText.setText(this.areaName);
         }
 
         @Override
@@ -145,6 +145,7 @@ public class ChooseAreaFragment extends Fragment {
                     activity.drawerLayout.closeDrawers();
                     activity.swipeRefreshLayout.setRefreshing(true);
                     activity.requestWeatherInfo(weatherId);
+                    activity.refreshWeatherId = weatherId; // 修复刷新bug
                 }
 
             }

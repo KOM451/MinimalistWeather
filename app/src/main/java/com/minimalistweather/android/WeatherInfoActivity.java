@@ -37,6 +37,10 @@ import okhttp3.Response;
 
 public class WeatherInfoActivity extends AppCompatActivity {
 
+    private static final String TAG = "WeatherInfoActivity";
+
+    public String refreshWeatherId; // 用于修复刷新bug
+
     public DrawerLayout drawerLayout;
 
     public SwipeRefreshLayout swipeRefreshLayout; // 用于下拉刷新
@@ -121,10 +125,11 @@ public class WeatherInfoActivity extends AppCompatActivity {
             // 请求天气信息
             requestWeatherInfo(weatherId);
         }
+        refreshWeatherId = weatherId;
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() { // 下拉请求天气数据
-                requestWeatherInfo(weatherId);
+                requestWeatherInfo(refreshWeatherId);
             }
         });
         navButton.setOnClickListener(new View.OnClickListener() {
@@ -163,8 +168,8 @@ public class WeatherInfoActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                final String repinseStr = response.body().string();
-                final WeatherInfo weatherInfo = JsonUtil.weatherInfoHandler(repinseStr);
+                final String responseStr = response.body().string();
+                final WeatherInfo weatherInfo = JsonUtil.weatherInfoHandler(responseStr);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -172,7 +177,7 @@ public class WeatherInfoActivity extends AppCompatActivity {
                             SharedPreferences.Editor editor = PreferenceManager
                                     .getDefaultSharedPreferences(WeatherInfoActivity.this)
                                     .edit();
-                            editor.putString("weather", repinseStr);
+                            editor.putString("weather", responseStr);
                             editor.apply();
                             // 展示天气信息
                             showWeatherInfoContent(weatherInfo);
